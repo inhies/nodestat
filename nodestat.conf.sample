@@ -1,0 +1,31 @@
+{
+	"DataSources": {
+		"CjdnsPeers": {
+			"Interval": "1s"
+		}
+	},
+	"Access": {
+		"JSONApi": {
+			"Enabled": true,
+			"Addr": "[::]:8080",
+			"Authentication": {
+				"Method": "none",
+				"IP": {
+					"Authorized": [
+						"::1",
+						"127.0.0.1"
+					]
+				}
+			}
+		},
+		"Munin": {
+			"IsTheMuninPluginDoneYet": false
+		}
+	},
+	"Log": {
+		"TimestampFormat": "Jan _2 15:04:05.000000",
+		"TimestampTimezone": "UTC",
+		"LogLevel": "DEBUG",
+		"IncLogLevel": false
+	}
+}
