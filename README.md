@@ -11,9 +11,12 @@ format, and content of the data it provides is subject to change at any time.**
 Installation
 ------------
 
-To install nodestat, run `go get github.com/inhies/nodestat`. You will need to
-create a configuration file. Simply copy the sample file to `nodestat.conf` and
-place it in the same directory as your nodestat executable. 
+To use nodestat, first clone this repository with `git clone
+https://github.com/inhies/nodestat`. Then `cd nodestat`. Copy the example
+configuration file to your own working copy with `cp nodestat.conf.sample
+nodestat.conf` and build nodestat with `go build`. 
+
+You can start nodestat by running `./nodestat`.
 
 
 Usage
