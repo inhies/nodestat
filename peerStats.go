@@ -11,7 +11,7 @@ func peerStatLoop() {
 		time.Sleep(time.Duration(SystemConfig.DataSources.CjdnsPeers.Interval))
 
 		// Get peer stats from cjdns
-		results, err := Data.CjdnsConn.InterfaceController_peerStats(0)
+		results, err := Data.CjdnsConn.InterfaceController_peerStats()
 		if err != nil {
 			l.Noticeln(err)
 			return
