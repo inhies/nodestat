@@ -86,6 +86,13 @@ type configuration struct {
 		// Include the log message level in the log.
 		IncLogLevel bool
 	}
+	
+	// Settings for the front-end.
+	Web struct {
+		// Set to true if they want to see a front end, false
+		// if they only want the API.
+		EnableFrontEnd bool
+	}
 }
 
 // Creates a JSON configuration file. I find it's easier to do set the values
