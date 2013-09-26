@@ -131,6 +131,7 @@ func main() {
 		http.HandleFunc("/peers/", peerStatsHandler)
 		http.HandleFunc("/node/", nodeStatsHandler)
 		http.HandleFunc("/all/", allStatsHandler)
+		http.HandleFunc("/static/", assetsHandler)
 		http.ListenAndServe(SystemConfig.Access.JSONApi.Addr, nil)
 	}
 
