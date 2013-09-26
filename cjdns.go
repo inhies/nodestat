@@ -29,9 +29,11 @@ func updateCjdnsStats() (err error) {
 	}
 	for _, p := range rawPids {
 
-		// Get process uptime, percent cpu, percent memory, and arguments
+		// Get process uptime, percent cpu, percent memory, and arguments.
+		// For some reason I have to use multiple -o to get ps to play nice...
 		results, err = exec.Command("ps", "-p", string(p), "-o",
-			"etimes=,pcpu=,pmem=,args=").CombinedOutput()
+			"etime=", "-o", "pcpu=", "-o", "pmem=", "-o",
+			"args=").CombinedOutput()
 
 		if err != nil {
 			return
@@ -40,11 +42,29 @@ func updateCjdnsStats() (err error) {
 		// We should have at least 6 fields
 		data := bytes.Fields(results)
 		if len(data) < 6 {
+			l.Debugln(data)
 			return fmt.Errorf("Not enough information returned from ps")
 		}
 
-		// Parse the uptime in seconds
-		tempUptime, err := time.ParseDuration(string(bytes.TrimSpace(data[0])) + "s")
+		// Parse the uptime
+		rawDur := bytes.TrimSpace(data[0])
+		var duration string
+		var splitTime [][]byte
+		if bytes.Contains(rawDur, []byte("-")) {
+			// Number of days was included in the response, so we'll split it
+			// off and pre-populate our overall duration with it.
+			splitDay := bytes.Fields(rawDur)
+			splitTime = bytes.Split(splitDay[1], []byte(":"))
+			duration = string(splitDay[0]) + "d"
+		} else {
+			// We just have hh:mm:ss data, so split it up.
+			splitTime = bytes.Split(rawDur, []byte(":"))
+		}
+
+		// Manually create the duration string for time.ParseDuration
+		duration += string(splitTime[0]) + "h" + string(splitTime[1]) + "m" + string(splitTime[2]) + "s"
+
+		tempUptime, err := time.ParseDuration(duration)
 
 		if err != nil {
 			return err
