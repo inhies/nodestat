@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/binary"
 	"fmt"
 	"os/exec"
 	"strconv"
@@ -48,21 +49,35 @@ func updateCjdnsStats() (err error) {
 
 		// Parse the uptime
 		rawDur := bytes.TrimSpace(data[0])
-		var duration string
+
 		var splitTime [][]byte
+		var hours uint64
 		if bytes.Contains(rawDur, []byte("-")) {
 			// Number of days was included in the response, so we'll split it
-			// off and pre-populate our overall duration with it.
-			splitDay := bytes.Fields(rawDur)
+			// off and convert to hours
+			splitDay := bytes.Split(rawDur, []byte("-"))
+			buf := bytes.NewBuffer(splitDay[0])
+			days, err := binary.ReadUvarint(buf)
+			if err != nil {
+				return err
+			}
+			hours = days * 24
+
 			splitTime = bytes.Split(splitDay[1], []byte(":"))
-			duration = string(splitDay[0]) + "d"
 		} else {
 			// We just have hh:mm:ss data, so split it up.
 			splitTime = bytes.Split(rawDur, []byte(":"))
 		}
 
+		// Convert the hours to a uint64 so we can add them to any hours we may
+		// have from the day conversion
+		buf := bytes.NewBuffer(splitTime[0])
+		rawHours, err := binary.ReadUvarint(buf)
+		hours += rawHours
+
 		// Manually create the duration string for time.ParseDuration
-		duration += string(splitTime[0]) + "h" + string(splitTime[1]) + "m" + string(splitTime[2]) + "s"
+		duration := strconv.FormatUint(hours, 10) + "h" + string(splitTime[1]) +
+			"m" + string(splitTime[2]) + "s"
 
 		tempUptime, err := time.ParseDuration(duration)
 
