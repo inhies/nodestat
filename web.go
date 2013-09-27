@@ -41,5 +41,5 @@ func assetsHandler(w http.ResponseWriter, r *http.Request) {
 
 // RootHandler handles the "/" connections
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	t.ExecuteTemplate(w, "index", nil)
+	t.ExecuteTemplate(w, "index", &Data)
 }

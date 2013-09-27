@@ -5,7 +5,130 @@
     <link rel="stylesheet" href="/static/css/style.css">
   </head>
   <body>
-    merp
+    <div class="wrap">
+      <!--API-->
+      <h1>API Points</h1>
+      <p>
+	<a href="/all">/all</a>
+	<a href="/peers">/peers</a>
+	<a href="/node">/node</a>
+      </p>
+      <!--Node-->
+      <h1>Node</h1>
+      <div class="node">
+	<table>
+	  <tr>
+	    <td>Memory</td>
+	    <td>{{ .Node.Memory }}</td>
+	  </tr>
+	  <tr>
+	    <td>Rate In</td>
+	    <td>{{ .Node.RateIn }}</td>
+	  </tr>
+	  <tr>
+	    <td>Rate Out</td>
+	    <td>{{ .Node.RateOut }}</td>
+	  </tr>
+	  <tr>
+	    <td>Bytes In</td>
+	    <td>{{ .Node.BytesIn }}</td>
+	  </tr>
+	  <tr>
+	    <td>Bytes Out</td>
+	    <td>{{ .Node.BytesOut }}</td>
+	  </tr>
+	</table>
+      </div>
+      <div class="node l">
+	<table>
+	  <th>Angel</th>
+	  <th></th>
+	  <tr>
+	    <td>Uptime</td>
+	    <td>{{ .Node.Angel.Uptime }}</td>
+	  </tr>
+	  <tr>
+	    <td>Percent CPU</td>
+	    <td>{{ .Node.Angel.PercentCPU }}</td>
+	  </tr>
+	  <tr>
+	    <td>Percent Memory</td>
+	    <td>{{ .Node.Angel.PercentMemory }}</td>
+	  </tr>
+	</table>
+      </div>
+      <div class="node r">
+	<table>
+	  <th>Core</th>
+	  <th></th>
+	  <tr>
+	    <td>Uptime</td>
+	    <td>{{ .Node.Core.Uptime }}</td>
+	  </tr>
+	  <tr>
+	    <td>Percent CPU</td>
+	    <td>{{ .Node.Core.PercentCPU }}</td>
+	  </tr>
+	  <tr>
+	    <td>Percent Memory</td>
+	    <td>{{ .Node.Core.PercentMemory }}</td>
+	  </tr>
+	</table>
+      </div>
+      
+      <!--Peers-->
+      <h1>Peers</h1>
+      {{ range $i := .Peers }}
+      <div class="peer">
+	<table>
+	  <tr>
+	    <td>Public Key</td>
+	    <td>{{ $i.PublicKey }}</td>
+	  </tr>
+	  <tr>
+	    <td>State</td>
+	    <td>{{ $i.State }}</td>
+	  </tr>
+	  <tr>
+	    <td>Is Incoming</td>
+	    <td>{{ $i.IsIncoming }}</td>
+	  </tr>
+	  <tr>
+	    <td>Bytes In</td>
+	    <td>{{ $i.BytesIn }}</td>
+	  </tr>
+	  <tr>
+	    <td>Bytes Out</td>
+	    <td>{{ $i.BytesOut }}</td>
+	  </tr>
+	  <tr>
+	    <td>Last</td>
+	    <td>{{ $i.Last }}</td>
+	  </tr>
+	  <tr>
+	    <td>Switch Label</td>
+	    <td>{{ $i.SwitchLabel }}</td>
+	  </tr>
+	  <tr>
+	    <td>IPv6</td>
+	    <td>{{ $i.IPv6 }}</td>
+	  </tr>
+	  <tr>
+	    <td>Rate In</td> 
+	    <td>{{ $i.RateIn }}</td> 
+	  </tr>
+	  <tr>
+	    <td>Rate Out</td> 
+	    <td>{{ $i.RateOut }}</td> 
+	  </tr>
+	  <tr>
+	    <td>Last Update</td>
+	    <td>{{ $i.LastUpdate }}</td> 
+	  </tr>
+	</table>
+      </div>
+      {{ end }}
+    </div>
   </body>
 </html>
 {{ end }}

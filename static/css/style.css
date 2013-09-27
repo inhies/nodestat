@@ -2,6 +2,55 @@
 
 body {
     margin: 0;
-    font-family: Helvetica, sans-serif;
+    font-family: monospace;
     font-size: 14px;
+    background-color: #FFF;
+}
+
+a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #c0392b;
+}
+
+.peer, .node {
+    margin: 15px auto;
+    text-align: left;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    background-color: #FCFCFC;
+    color: #333;
+    border-top: 3px solid #e74c3c;
+}
+
+.wrap {
+    text-align: center;
+    margin: 15px 0px;
+}
+
+.l, .r {
+    display: inline-block;
+}
+
+table td, table th {
+    padding: 8px;
+}
+
+table tr:nth-child(odd) {
+    background-color: #F6F6F6;
+}
+
+h1 {
+    margin: 0px;
+    font-family: Helvetica, sans-serf;
+    color: #333;
+    font-size: 48px;
+    text-align: center;
 }
