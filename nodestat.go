@@ -14,7 +14,6 @@ import (
 	"github.com/inhies/go-cjdns-refactor/cjdns"
 	"github.com/inhies/go-log"
 	"github.com/kylelemons/godebug/pretty"
-	"net/http"
 	"os"
 	"runtime"
 	"time"
@@ -125,23 +124,8 @@ func main() {
 	// Launch the peer stat fetching routine.
 	go peerStatLoop()
 
-	// Start the HTTP JSON API if enabled.
-	if SystemConfig.Access.JSONApi.Enabled {
-		l.Infoln("Starting HTTP JSON API")
-		http.HandleFunc("/peers/", peerStatsHandler)
-		http.HandleFunc("/node/", nodeStatsHandler)
-		http.HandleFunc("/all/", allStatsHandler)
-		
-		// If we set the config option to true, show the
-		// front-end.
-		if SystemConfig.Web.EnableFrontEnd {
-			http.HandleFunc("/static/", assetsHandler)
-			http.HandleFunc("/", rootHandler)
-		}
-
-		// Listen and server, bitches!
-		http.ListenAndServe(SystemConfig.Access.JSONApi.Addr, nil)
-	}
+	// Start web server if enabled
+	Serve()
 
 	l.Debugln("All enabled access methods have been started")
 	// Enter in to an infinite loop
