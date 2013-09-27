@@ -9,3 +9,8 @@ import (
 func assetsHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, r.URL.Path[1:])
 }
+
+// RootHandler handles the "/" connections
+func rootHandler(w http.ResponseWriter, r *http.Request) {
+	
+}

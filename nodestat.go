@@ -131,7 +131,15 @@ func main() {
 		http.HandleFunc("/peers/", peerStatsHandler)
 		http.HandleFunc("/node/", nodeStatsHandler)
 		http.HandleFunc("/all/", allStatsHandler)
-		http.HandleFunc("/static/", assetsHandler)
+		
+		// If we set the config option to true, show the
+		// front-end.
+		if SystemConfig.Web.EnableFrontEnd {
+			http.HandleFunc("/static/", assetsHandler)
+			http.HandleFunc("/", rootHandler)
+		}
+
+		// Listen and server, bitches!
 		http.ListenAndServe(SystemConfig.Access.JSONApi.Addr, nil)
 	}
 
