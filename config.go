@@ -138,6 +138,9 @@ func makeConfig() {
 		return
 	}
 
+	// Front end
+	c.Web.EnableFrontEnd = true
+
 	jsonout, err := json.MarshalIndent(c, "", "\t")
 	if err != nil {
 		fmt.Println("Error making config:", err)
