@@ -86,6 +86,13 @@ type configuration struct {
 		// Include the log message level in the log.
 		IncLogLevel bool
 	}
+	
+	// Settings for the front-end.
+	Web struct {
+		// Set to true if they want to see a front end, false
+		// if they only want the API.
+		EnableFrontEnd bool
+	}
 }
 
 // Creates a JSON configuration file. I find it's easier to do set the values
@@ -130,6 +137,9 @@ func makeConfig() {
 		println("Invalid timestamp timezone specified")
 		return
 	}
+
+	// Front end
+	c.Web.EnableFrontEnd = true
 
 	jsonout, err := json.MarshalIndent(c, "", "\t")
 	if err != nil {

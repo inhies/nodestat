@@ -27,5 +27,8 @@
 		"TimestampTimezone": "UTC",
 		"LogLevel": "DEBUG",
 		"IncLogLevel": false
+	},
+	"Web": {
+	       "EnableFrontEnd": true
 	}
 }
