@@ -1,15 +1,15 @@
 package main
 
 import (
-	"net/http"
 	"html/template"
+	"net/http"
 )
 
 var (
 	t *template.Template
 )
 
-// Serve HTTP 
+// Serve HTTP
 func Serve() {
 	// Start the HTTP JSON API if enabled.
 	if SystemConfig.Access.JSONApi.Enabled {
@@ -17,7 +17,7 @@ func Serve() {
 		http.HandleFunc("/peers/", peerStatsHandler)
 		http.HandleFunc("/node/", nodeStatsHandler)
 		http.HandleFunc("/all/", allStatsHandler)
-		
+
 		// If we set the config option to true, show the
 		// front-end.
 		if SystemConfig.Web.EnableFrontEnd {
@@ -25,9 +25,9 @@ func Serve() {
 			http.HandleFunc("/static/", assetsHandler)
 			http.HandleFunc("/", rootHandler)
 			// Compile templates
-			t = template.Must(template.ParseGlob("templates/*"))
+			t = template.Must(template.ParseGlob("templates/*.html"))
 		}
-		
+
 		// Listen and serve, bitches!
 		http.ListenAndServe(SystemConfig.Access.JSONApi.Addr, nil)
 	}
