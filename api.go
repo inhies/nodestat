@@ -30,7 +30,7 @@ func allStatsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Render the json and send it
-	err = sendJSON(w, Data)
+	err = sendJSON(w, r, Data)
 	if err != nil {
 		l.Errln(err)
 		return
@@ -59,7 +59,7 @@ func nodeStatsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = sendJSON(w, Data.Node)
+	err = sendJSON(w, r, Data.Node)
 	if err != nil {
 		http.Error(w, "500 Server Error", http.StatusInternalServerError)
 		l.Errln(err)
@@ -84,20 +84,33 @@ func peerStatsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Render the json and send it
-	err = sendJSON(w, Data.Peers)
+	err = sendJSON(w, r, Data.Peers)
 	if err != nil {
 		l.Errln(err)
 		return
 	}
 }
 
-func sendJSON(w http.ResponseWriter, v interface{}) (err error) {
+func sendJSON(w http.ResponseWriter, r *http.Request, v interface{}) (err error) {
 
 	// Render the json and send it
 	jsonOut, err := json.MarshalIndent(v, "", "\t")
 	if err != nil {
 		return
 	}
+        r.ParseForm()
+        callback := []byte(r.Form.Get("callback"))
+        cb := []byte(r.Form.Get("cb"))
+        
+        if(len(callback) > 0) {
+            callback := append(callback, []byte("(")...)
+            jsonOut = append(callback, jsonOut...)
+            jsonOut = append(jsonOut, []byte("(")...)
+        } else if(len(cb) > 0) {
+            cb := append(cb, []byte("(")...)
+            jsonOut = append(cb, jsonOut...)
+            jsonOut = append(jsonOut, []byte("(")...)
+        }
 	w.Header().Set("Content-Length", strconv.Itoa(len(jsonOut)))
 	w.Header().Set("Content-Type", "Text/JavaScript")
 	w.Write(jsonOut)
