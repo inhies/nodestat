@@ -28,6 +28,7 @@ func allStatsHandler(w http.ResponseWriter, r *http.Request) {
 		l.Errln(err)
 		return
 	}
+
 	// Render the json and send it
 	err = sendJSON(w, Data)
 	if err != nil {

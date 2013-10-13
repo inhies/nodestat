@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"encoding/binary"
 	"fmt"
 	"os/exec"
 	"strconv"
@@ -21,7 +20,7 @@ func updateCjdnsStats() (err error) {
 		return
 	}
 
-	rawPids := bytes.Fields(results) //Split(results, []byte("\n"))
+	rawPids := bytes.Fields(results)
 
 	if len(rawPids) > 2 {
 		return fmt.Errorf("Too many cjdroute instances running")
@@ -29,7 +28,6 @@ func updateCjdnsStats() (err error) {
 		return fmt.Errorf("Not enough cjdroute instances running")
 	}
 	for _, p := range rawPids {
-
 		// Get process uptime, percent cpu, percent memory, and arguments.
 		// For some reason I have to use multiple -o to get ps to play nice...
 		results, err = exec.Command("ps", "-p", string(p), "-o",
@@ -49,17 +47,16 @@ func updateCjdnsStats() (err error) {
 
 		// Parse the uptime
 		rawDur := bytes.TrimSpace(data[0])
-
 		var splitTime [][]byte
 		var hours uint64
 		if bytes.Contains(rawDur, []byte("-")) {
 			// Number of days was included in the response, so we'll split it
 			// off and convert to hours
 			splitDay := bytes.Split(rawDur, []byte("-"))
-			buf := bytes.NewBuffer(splitDay[0])
-			days, err := binary.ReadUvarint(buf)
+			var days uint64
+			days, err = strconv.ParseUint(string(splitDay[0]), 10, 64)
 			if err != nil {
-				return err
+				return
 			}
 			hours = days * 24
 
@@ -71,13 +68,25 @@ func updateCjdnsStats() (err error) {
 
 		// Convert the hours to a uint64 so we can add them to any hours we may
 		// have from the day conversion
-		buf := bytes.NewBuffer(splitTime[0])
-		rawHours, err := binary.ReadUvarint(buf)
+		var rawHours uint64
+		rawHours, err = strconv.ParseUint(string(splitTime[0]), 10, 64)
+		if err != nil {
+			return
+		}
 		hours += rawHours
 
 		// Manually create the duration string for time.ParseDuration
-		duration := strconv.FormatUint(hours, 10) + "h" + string(splitTime[1]) +
-			"m" + string(splitTime[2]) + "s"
+		var duration string
+		switch len(splitTime) {
+		case 3:
+			duration = strconv.FormatUint(hours, 10) + "h" +
+				string(splitTime[1]) + "m" + string(splitTime[2]) + "s"
+		case 2:
+			duration = string(splitTime[0]) + "m" + string(splitTime[1]) + "s"
+		default:
+			err = fmt.Errorf("Unable to parse cjdns uptime")
+			return
+		}
 
 		tempUptime, err := time.ParseDuration(duration)
 
