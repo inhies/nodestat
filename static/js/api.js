@@ -51,6 +51,10 @@ function getInfo() {
 	type: 'GET',
 	dataType: 'json',
 	success: function(res) {
+	    if ($('.header').hasClass('.failure'))
+		$('.header').removeClass('failure').addClass('success');
+	    
+	    
 	    $('.core .uptime').html('<div class="text">Uptime</div>'+res.Node.Core.Uptime);
 	    $('.core .cpu').html('<div class="text">CPU Usage</div>'+res.Node.Core.PercentCPU+'%');
 	    $('.core .mem').html('<div class="text">Memory Usage</div>'+res.Node.Core.PercentMemory+'%');
@@ -65,6 +69,10 @@ function getInfo() {
 	    });
 	    $('.peers').html('<pre>'+JSON.stringify(res.Peers, null, 4)+'</pre>');
 	    $('#peers').html('Peers ('+peers+')');
+	},
+	error: function() {
+	    $('.header').removeClass('success').addClass('failure');
+	    $('.header').html('Cjdns is not running!');
 	}
     });
 
