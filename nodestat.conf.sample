@@ -8,6 +8,7 @@
 		"JSONApi": {
 			"Enabled": true,
 			"Addr": "[::]:8080",
+                        "EnableJSCallbacks": true,
 			"Authentication": {
 				"Method": "none",
 				"IP": {

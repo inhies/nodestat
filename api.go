@@ -101,15 +101,16 @@ func sendJSON(w http.ResponseWriter, r *http.Request, v interface{}) (err error)
         r.ParseForm()
         callback := []byte(r.Form.Get("callback"))
         cb := []byte(r.Form.Get("cb"))
-        
-        if(len(callback) > 0) {
-            callback := append(callback, []byte("(")...)
-            jsonOut = append(callback, jsonOut...)
-            jsonOut = append(jsonOut, []byte("(")...)
-        } else if(len(cb) > 0) {
-            cb := append(cb, []byte("(")...)
-            jsonOut = append(cb, jsonOut...)
-            jsonOut = append(jsonOut, []byte("(")...)
+        if SystemConfig.Access.JSONApi.EnableJSCallbacks {
+                if(len(callback) > 0) {
+                        callback := append(callback, []byte("(")...)
+                        jsonOut = append(callback, jsonOut...)
+                        jsonOut = append(jsonOut, []byte("(")...)
+                } else if(len(cb) > 0) {
+                        cb := append(cb, []byte("(")...)
+                        jsonOut = append(cb, jsonOut...)
+                        jsonOut = append(jsonOut, []byte("(")...)
+                }
         }
 	w.Header().Set("Content-Length", strconv.Itoa(len(jsonOut)))
 	w.Header().Set("Content-Type", "Text/JavaScript")
