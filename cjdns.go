@@ -3,13 +3,16 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"net/http"
 	"os/exec"
 	"strconv"
 	"time"
 )
 
 // Updates the cjdns statistics in the global Data struct.
-func updateCjdnsStats() (err error) {
+func updateCjdnsStats() (err error, httpStatusCode int) {
+	// Set this as the default return status
+	httpStatusCode = http.StatusInternalServerError
 	Data.Node.Memory, err = Data.CjdnsConn.Memory()
 	if err != nil {
 		return
@@ -23,9 +26,12 @@ func updateCjdnsStats() (err error) {
 	rawPids := bytes.Fields(results)
 
 	if len(rawPids) > 2 {
-		return fmt.Errorf("Too many cjdroute instances running")
+		err = fmt.Errorf("Too many cjdroute instances running")
+		return
 	} else if len(rawPids) < 2 {
-		return fmt.Errorf("Not enough cjdroute instances running")
+		err = fmt.Errorf("Not enough cjdroute instances running")
+		httpStatusCode = http.StatusServiceUnavailable
+		return
 	}
 	for _, p := range rawPids {
 		// Get process uptime, percent cpu, percent memory, and arguments.
@@ -42,7 +48,8 @@ func updateCjdnsStats() (err error) {
 		data := bytes.Fields(results)
 		if len(data) < 6 {
 			l.Debugln(data)
-			return fmt.Errorf("Not enough information returned from ps")
+			err = fmt.Errorf("Not enough information returned from ps")
+			return
 		}
 
 		// Parse the uptime
@@ -88,10 +95,11 @@ func updateCjdnsStats() (err error) {
 			return
 		}
 
-		tempUptime, err := time.ParseDuration(duration)
+		var tempUptime time.Duration
+		tempUptime, err = time.ParseDuration(duration)
 
 		if err != nil {
-			return err
+			return
 		}
 
 		// The second argument returned from 'args=' should be angel or core
@@ -101,11 +109,11 @@ func updateCjdnsStats() (err error) {
 			n.Uptime = Duration(tempUptime)
 			n.PercentCPU, err = strconv.ParseFloat(string(data[1]), 64)
 			if err != nil {
-				return err
+				return
 			}
 			n.PercentMemory, err = strconv.ParseFloat(string(data[2]), 64)
 			if err != nil {
-				return err
+				return
 			}
 
 		case "angel":
@@ -113,15 +121,16 @@ func updateCjdnsStats() (err error) {
 			n.Uptime = Duration(tempUptime)
 			n.PercentCPU, err = strconv.ParseFloat(string(data[1]), 64)
 			if err != nil {
-				return err
+				return
 			}
 			n.PercentMemory, err = strconv.ParseFloat(string(data[2]), 64)
 			if err != nil {
-				return err
+				return
 			}
 
 		default:
-			return fmt.Errorf("Can not determine if PID belongs to angel or core.")
+			err = fmt.Errorf("Can not determine if PID belongs to angel or core.")
+			return
 		}
 	}
 	return

@@ -112,9 +112,25 @@ func init() {
 func main() {
 
 	// Connect to cjdns using the default ~/.cjdnsadmin file
+
+	/*
+	   // For some reason this results in an infinite loop, with the same error
+	   // message displayed. It LOOKS right but I'm not sure why this happens
+	   var conn *cjdns.Conn
+	   var err error
+	   for conn, err = cjdns.Connect(nil); err != nil; {
+	       l.Emergln(err)
+	       time.Sleep(1 * time.Second)
+	   }
+	*/
+
+	// This works but I don't like it. I wish the above code would play nice...
+connect:
 	conn, err := cjdns.Connect(nil)
 	if err != nil {
-		l.Fatalln(err)
+		l.Emergln(err)
+		time.Sleep(1 * time.Second)
+		goto connect
 	}
 
 	// Set the cjdns connection and create the peer data map

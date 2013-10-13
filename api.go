@@ -22,9 +22,9 @@ func allStatsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = updateCjdnsStats()
+	err, httpStatusCode := updateCjdnsStats()
 	if err != nil {
-		http.Error(w, "500 Server Error", http.StatusInternalServerError)
+		http.Error(w, "500 Server Error", httpStatusCode)
 		l.Errln(err)
 		return
 	}
@@ -52,9 +52,9 @@ func nodeStatsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = updateCjdnsStats()
+	err, httpStatusCode := updateCjdnsStats()
 	if err != nil {
-		http.Error(w, "500 Server Error", http.StatusInternalServerError)
+		http.Error(w, "500 Server Error", httpStatusCode)
 		l.Errln(err)
 		return
 	}
@@ -98,20 +98,20 @@ func sendJSON(w http.ResponseWriter, r *http.Request, v interface{}) (err error)
 	if err != nil {
 		return
 	}
-        r.ParseForm()
-        callback := []byte(r.Form.Get("callback"))
-        cb := []byte(r.Form.Get("cb"))
-        if SystemConfig.Access.JSONApi.EnableJSCallbacks {
-                if(len(callback) > 0) {
-                        callback := append(callback, []byte("(")...)
-                        jsonOut = append(callback, jsonOut...)
-                        jsonOut = append(jsonOut, []byte("(")...)
-                } else if(len(cb) > 0) {
-                        cb := append(cb, []byte("(")...)
-                        jsonOut = append(cb, jsonOut...)
-                        jsonOut = append(jsonOut, []byte("(")...)
-                }
-        }
+	r.ParseForm()
+	callback := []byte(r.Form.Get("callback"))
+	cb := []byte(r.Form.Get("cb"))
+	if SystemConfig.Access.JSONApi.EnableJSCallbacks {
+		if len(callback) > 0 {
+			callback := append(callback, []byte("(")...)
+			jsonOut = append(callback, jsonOut...)
+			jsonOut = append(jsonOut, []byte("(")...)
+		} else if len(cb) > 0 {
+			cb := append(cb, []byte("(")...)
+			jsonOut = append(cb, jsonOut...)
+			jsonOut = append(jsonOut, []byte("(")...)
+		}
+	}
 	w.Header().Set("Content-Length", strconv.Itoa(len(jsonOut)))
 	w.Header().Set("Content-Type", "Text/JavaScript")
 	w.Write(jsonOut)
