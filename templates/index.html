@@ -1,133 +1,48 @@
 {{ define "index" }}
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Status</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <script type="text/javascript" src="static/js/jquery.js"></script>
+    <script type="text/javascript" src="static/js/api.js"></script>
+    <meta charset="utf-8">
   </head>
   <body>
     <div class="wrap">
-      <!--API-->
-      <h1>API Points</h1>
-      <p>
-	<a href="/all">/all</a>
-	<a href="/peers">/peers</a>
-	<a href="/node">/node</a>
-      </p>
-      <!--Node-->
-      <h1>Node</h1>
-      <div class="node">
-	<table>
-	  <tr>
-	    <td>Memory</td>
-	    <td>{{ .Node.Memory }}</td>
-	  </tr>
-	  <tr>
-	    <td>Rate In</td>
-	    <td>{{ .Node.RateIn }}</td>
-	  </tr>
-	  <tr>
-	    <td>Rate Out</td>
-	    <td>{{ .Node.RateOut }}</td>
-	  </tr>
-	  <tr>
-	    <td>Bytes In</td>
-	    <td>{{ .Node.BytesIn }}</td>
-	  </tr>
-	  <tr>
-	    <td>Bytes Out</td>
-	    <td>{{ .Node.BytesOut }}</td>
-	  </tr>
-	</table>
+      <div class="updated">
+	Last Updated <span id="update">0 Seconds Ago</span>
       </div>
-      <div class="node l">
-	<table>
-	  <th>Angel</th>
-	  <th></th>
-	  <tr>
-	    <td>Uptime</td>
-	    <td>{{ .Node.Angel.Uptime }}</td>
-	  </tr>
-	  <tr>
-	    <td>Percent CPU</td>
-	    <td>{{ .Node.Angel.PercentCPU }}</td>
-	  </tr>
-	  <tr>
-	    <td>Percent Memory</td>
-	    <td>{{ .Node.Angel.PercentMemory }}</td>
-	  </tr>
-	</table>
+      <div class="header success">
+	All Systems Operational
       </div>
-      <div class="node r">
-	<table>
-	  <th>Core</th>
-	  <th></th>
-	  <tr>
-	    <td>Uptime</td>
-	    <td>{{ .Node.Core.Uptime }}</td>
-	  </tr>
-	  <tr>
-	    <td>Percent CPU</td>
-	    <td>{{ .Node.Core.PercentCPU }}</td>
-	  </tr>
-	  <tr>
-	    <td>Percent Memory</td>
-	    <td>{{ .Node.Core.PercentMemory }}</td>
-	  </tr>
-	</table>
+      <div class="break"></div>
+      <div class="q">
+	What is this site?
       </div>
-      
-      <!--Peers-->
-      <h1>Peers</h1>
-      {{ range $i := .Peers }}
-      <div class="peer">
-	<table>
-	  <tr>
-	    <td>Public Key</td>
-	    <td>{{ $i.PublicKey }}</td>
-	  </tr>
-	  <tr>
-	    <td>State</td>
-	    <td>{{ $i.State }}</td>
-	  </tr>
-	  <tr>
-	    <td>Is Incoming</td>
-	    <td>{{ $i.IsIncoming }}</td>
-	  </tr>
-	  <tr>
-	    <td>Bytes In</td>
-	    <td>{{ $i.BytesIn }}</td>
-	  </tr>
-	  <tr>
-	    <td>Bytes Out</td>
-	    <td>{{ $i.BytesOut }}</td>
-	  </tr>
-	  <tr>
-	    <td>Last</td>
-	    <td>{{ $i.Last }}</td>
-	  </tr>
-	  <tr>
-	    <td>Switch Label</td>
-	    <td>{{ $i.SwitchLabel }}</td>
-	  </tr>
-	  <tr>
-	    <td>IPv6</td>
-	    <td>{{ $i.IPv6 }}</td>
-	  </tr>
-	  <tr>
-	    <td>Rate In</td> 
-	    <td>{{ $i.RateIn }}</td> 
-	  </tr>
-	  <tr>
-	    <td>Rate Out</td> 
-	    <td>{{ $i.RateOut }}</td> 
-	  </tr>
-	  <tr>
-	    <td>Last Update</td>
-	    <td>{{ $i.LastUpdate }}</td> 
-	  </tr>
-	</table>
+      <div class="a">
+	This is a site that monitors <a href="http://cjdns.info">Cjdns</a> using <a href="https://github.com/inhies/nodestat">Nodestat</a> to collection the information. It has API points at <a href="/node">/node</a>, <a href="/peers">/peers</a>, and <a href="/all">/all</a>. The information updates every 5 seconds, but you can refresh at will.
       </div>
-      {{ end }}
+      <div class="break"></div>
+      <ul>
+	<li class="active" id="core">Core</li>
+	<li id="angel">Angel</li>
+	<li id="peers">Peers</li>
+      </ul>
+      <div class="break"></div>
+      <div class="core">
+	<div class="uptime"></div>
+	<div class="cpu"></div>
+	<div class="mem"></div>
+      </div>
+      <div class="angel">
+	<div class="uptime"></div>
+	<div class="cpu"></div>
+	<div class="mem"></div>
+      </div>
+      <div class="peers">
+	hi
+      </div>
     </div>
   </body>
 </html>

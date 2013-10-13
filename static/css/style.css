@@ -1,56 +1,161 @@
 @charset "UTF-8";
 
 body {
-    margin: 0;
-    font-family: monospace;
+    margin: 0px;
+    font-family: Helvetica, sans-serf;
     font-size: 14px;
-    background-color: #FFF;
+    color: #333;
 }
 
 a {
-    color: #e74c3c;
     text-decoration: none;
+    color: #3498db;
 }
 
 a:hover {
-    color: #c0392b;
+    color: #2980b9;
 }
 
-.peer, .node {
-    margin: 15px auto;
-    text-align: left;
-}
-
-table {
-    margin-left: auto;
-    margin-right: auto;
-    border-collapse: collapse;
-    background-color: #FCFCFC;
-    color: #333;
-    border-top: 3px solid #e74c3c;
-}
+/* 
+ * Wrap
+ * 
+ * .wrap
+ *   .break
+ */
 
 .wrap {
-    text-align: center;
-    margin: 15px 0px;
+    margin: 50px auto;
+    width: 700px;
 }
 
-.l, .r {
-    display: inline-block;
+.break {
+    height: 25px;
 }
 
-table td, table th {
-    padding: 8px;
+/*
+ * Updated
+ *
+ * .updated
+ *   #update
+ */
+
+.updated {
+    text-align: right;
+    padding: 5px;
+    text-transform: uppercase;
+    font-size: 10px;
 }
 
-table tr:nth-child(odd) {
-    background-color: #F6F6F6;
+#update {
+    font-weight: 900;
 }
 
-h1 {
+/*
+ * Header
+ * 
+ * .header
+ * 
+ * Types
+ *   .success
+ *   .failure
+ */
+
+.header {
+    padding: 10px;
+    text-align: left;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+.success {
+    background-color: #E5F2E5;
+    border: 1px solid #C4E1C8;
+    color: #95B891;
+}
+
+.failure {
+    background-color: #F2E5E5;
+    border: 1px solid #E1C4C4;
+    color: #CB7979;
+}
+
+/*
+ * Tables
+ *
+ * ul
+ *   li
+ *     .active
+ *
+ */
+
+ul {
     margin: 0px;
-    font-family: Helvetica, sans-serf;
-    color: #333;
+    padding: 0px;
+    list-style: none;
+}
+
+li {
+    display: inline-block;
+    padding: 15px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+li.active {
+    background-color: #333;
+    color: #FFF;
+}
+
+/*
+ * Core/Angel
+ * 
+ * .core, .angel
+ *   .uptime
+ *   .cpu
+ *   .mem
+ * 
+ * .peers
+ * 
+ * .text
+ *
+ */
+
+.core, .angel {
     font-size: 48px;
-    text-align: center;
+    font-weight: 900;
+    text-align: right;
+}
+
+.peers {
+    font-family: monospace;
+}
+
+.angel, .peers {
+    display: none;
+}
+
+.text {
+    float: left;
+}
+
+/*
+ * Q/A?
+ *
+ * .q
+ * .a
+ *
+ */
+
+.q {
+    font-weight: 900;
+    border-bottom: 1px solid #EFEFEF;
+    padding-bottom: 10px;
+}
+
+.a {
+    padding: 10px 0px;
+    line-height: 20px;
 }
