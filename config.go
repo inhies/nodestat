@@ -38,6 +38,9 @@ type configuration struct {
 
 			// Is this method enabled.
 			Enabled bool
+                        
+                        // Should we allow JS callbacks?
+                        EnableJSCallbacks bool
 
 			// Protocol, address, and port to listen on.
 			Addr string
