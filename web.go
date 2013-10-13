@@ -41,11 +41,5 @@ func assetsHandler(w http.ResponseWriter, r *http.Request) {
 
 // RootHandler handles the "/" connections
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	err := updateCjdnsStats()
-	if err != nil {
-		http.Error(w, "500 Server Error", http.StatusInternalServerError)
-		l.Errln(err)
-	} else {
-		t.ExecuteTemplate(w, "index", &Data)
-	}
+	t.ExecuteTemplate(w, "index", nil)
 }
