@@ -9,6 +9,7 @@
 			"Enabled": true,
 			"Addr": "[::]:8080",
                         "EnableJSCallbacks": true,
+			"AllowedDomains": "*",
 			"Authentication": {
 				"Method": "none",
 				"IP": {

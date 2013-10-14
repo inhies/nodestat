@@ -42,6 +42,9 @@ type configuration struct {
                         // Should we allow JS callbacks?
                         EnableJSCallbacks bool
 
+			// A regex string for domains that are allowed
+			AllowedDomains string
+
 			// Protocol, address, and port to listen on.
 			Addr string
 
