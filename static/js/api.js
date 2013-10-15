@@ -50,43 +50,47 @@ function getInfo() {
 	url: '/all',
 	type: 'GET',
 	dataType: 'json',
-	    statusCode: {
-		200: function(res) {
-		    if ($('.header').hasClass('.failure'))
-			$('.header').removeClass('failure').addClass('success');
-		    
-		    $('.core .uptime').html('<div class="text">Uptime</div>'+res.Node.Core.Uptime);
-		    $('.core .cpu').html('<div class="text">CPU Usage</div>'+res.Node.Core.PercentCPU+'%');
-		    $('.core .mem').html('<div class="text">Memory Usage</div>'+res.Node.Core.PercentMemory+'%');
-		    $('.angel .uptime').html('<div class="text">Uptime</div>'+res.Node.Angel.Uptime);
-		    $('.angel .cpu').html('<div class="text">CPU Usage</div>'+res.Node.Angel.PercentCPU+'%');
-		    $('.angel .mem').html('<div class="text">Memory Usage</div>'+res.Node.Angel.PercentMemory+'%');
-		    
-		    // Peers
-		    var peers = 0;
-		    $.each(res.Peers, function(key, val) {
-			peers++;
-		    });
-		    $('.peers').html('<pre>'+JSON.stringify(res.Peers, null, 4)+'</pre>');
-		    $('#peers').html('Peers ('+peers+')');
-		},
-		404: function() {
-		    $('.header').removeClass('success').addClass('failure');
-		    $('.header').html('Unable to connect to server API!');
-		},
-		401: function() {
-		    $('.header').removeClass('success').addClass('failure');
-		    $('.header').html('You are not authorized to view this information!');
-		},
-		503: function() {
-		    $('.header').removeClass('success').addClass('failure');
-		    $('.header').html('Cjdns is not running!');
-		},
-		500: function() {
-		    $('.header').removeClass('success').addClass('failure');
-		    $('.header').html('Server error!');
-		}
-	    }
+	statusCode: {
+            200: function(res) {
+                $('.header').removeClass('failure').addClass('success');
+                $('.header').html('All Systems Operational');
+		
+                $('.core .uptime').html('<div class="text">Uptime</div>'+res.Node.Core.Uptime);
+                $('.core .cpu').html('<div class="text">CPU Usage</div>'+res.Node.Core.PercentCPU+'%');
+                $('.core .mem').html('<div class="text">Memory Usage</div>'+res.Node.Core.PercentMemory+'%');
+                $('.angel .uptime').html('<div class="text">Uptime</div>'+res.Node.Angel.Uptime);
+                $('.angel .cpu').html('<div class="text">CPU Usage</div>'+res.Node.Angel.PercentCPU+'%');
+                $('.angel .mem').html('<div class="text">Memory Usage</div>'+res.Node.Angel.PercentMemory+'%');
+		
+                // Peers                                                                                                                                                         
+                var peers = 0;
+                $.each(res.Peers, function(key, val) {
+                    peers++;
+                });
+                $('.peers').html('<pre>'+JSON.stringify(res.Peers, null, 4)+'</pre>');
+                $('#peers').html('Peers ('+peers+')');
+            },
+            404: function() {
+                $('.header').removeClass('success').addClass('failure');
+                $('.header').html('Unable to connect to server API!');
+            },
+            401: function() {
+                $('.header').removeClass('success').addClass('failure');
+                $('.header').html('You are not authorized to view this information!');
+            },
+            500: function() {
+                $('.header').removeClass('success').addClass('failure');
+                $('.header').html('Server error!');
+            },
+            502: function() {
+                $('.header').removeClass('success').addClass('failure');
+                $('.header').html('Unable to connect to server API!');
+            },
+            503: function() {
+                $('.header').removeClass('success').addClass('failure');
+                $('.header').html('Cjdns is not running!');
+            }
+        }
     });
-
+    
 }
