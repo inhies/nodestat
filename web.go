@@ -3,10 +3,12 @@ package main
 import (
 	"html/template"
 	"net/http"
+	"regexp"
 )
 
 var (
 	t *template.Template
+	validIP *regexp.Regexp
 )
 
 // Serve HTTP
@@ -26,6 +28,9 @@ func Serve() {
 			http.HandleFunc("/", rootHandler)
 			// Compile templates
 			t = template.Must(template.ParseGlob("templates/*.html"))
+			if SystemConfig.Access.JSONApi.EnableJSCallbacks {
+				validIP = regexp.MustCompile(SystemConfig.Access.JSONApi.AllowedDomains)
+			}
 		}
 
 		// Listen and serve, bitches!
