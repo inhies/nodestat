@@ -8,12 +8,11 @@ cjdns version
 
 import (
 	"fmt"
-
-	// This is the 'refactor' branch of go-cjdns. Just clone the repo to this
-	// folder and switch branches.
-	"github.com/inhies/go-cjdns-refactor/cjdns"
+	"github.com/inhies/go-cjdns/admin"
+	"github.com/inhies/go-cjdns/key"
 	"github.com/inhies/go-log"
 	"github.com/kylelemons/godebug/pretty"
+	"net"
 	"os"
 	"runtime"
 	"time"
@@ -21,15 +20,15 @@ import (
 
 // Peer data.
 type Peer struct {
-	PublicKey   string
-	State       cjdns.PeerState
+	PublicKey   *key.Public
+	State       admin.PeerState
 	IsIncoming  bool
 	BytesIn     int64
 	BytesOut    int64
 	Last        time.Time
-	SwitchLabel string
+	SwitchLabel admin.Path
 
-	IPv6       string
+	IPv6       net.IP
 	RateIn     float64
 	RateOut    float64
 	LastUpdate time.Time
@@ -66,7 +65,7 @@ var Data struct {
 		angelPID []byte
 		corePID  []byte
 	}
-	CjdnsConn *cjdns.Conn `json:"-"`
+	CjdnsConn *admin.Conn `json:"-"`
 }
 
 // Create the programs configuration struct
@@ -126,7 +125,7 @@ func main() {
 
 	// This works but I don't like it. I wish the above code would play nice...
 connect:
-	conn, err := cjdns.Connect(nil)
+	conn, err := admin.Connect(nil)
 	if err != nil {
 		l.Emergln(err)
 		time.Sleep(1 * time.Second)

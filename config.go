@@ -38,9 +38,9 @@ type configuration struct {
 
 			// Is this method enabled.
 			Enabled bool
-                        
-                        // Should we allow JS callbacks?
-                        EnableJSCallbacks bool
+
+			// Should we allow JS callbacks?
+			EnableJSCallbacks bool
 
 			// A regex string for domains that are allowed
 			AllowedDomains string
@@ -92,7 +92,7 @@ type configuration struct {
 		// Include the log message level in the log.
 		IncLogLevel bool
 	}
-	
+
 	// Settings for the front-end.
 	Web struct {
 		// Set to true if they want to see a front end, false

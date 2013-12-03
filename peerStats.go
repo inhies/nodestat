@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/inhies/go-cjdns-refactor/cjdns"
+	"net"
 	"time"
 )
 
@@ -25,29 +25,24 @@ func peerStatLoop() {
 		for _, peer := range results {
 			// Create the peer in the map if it's not there yet and calculate
 			// the IPv6 address. If it is there, just get the IPv6 address.
-			var IPv6 string
-			if _, ok := Data.Peers[peer.PublicKey]; !ok {
-				IPv6, err = cjdns.PubKeyToIP(peer.PublicKey)
-				if err != nil {
-					l.Noticeln(err)
-					continue
-				}
-				//IPv6 = net.ParseIP(IP)
-				Data.Peers[peer.PublicKey] = Peer{
+			var IPv6 net.IP
+			if _, ok := Data.Peers[peer.PublicKey.String()]; !ok {
+				IPv6 = peer.PublicKey.IP()
+				Data.Peers[peer.PublicKey.String()] = Peer{
 					IPv6: IPv6,
 				}
 			} else {
-				IPv6 = Data.Peers[peer.PublicKey].IPv6
+				IPv6 = Data.Peers[peer.PublicKey.String()].IPv6
 			}
 
 			// Calculate upload and download rate
-			newRateIn := float64(peer.BytesIn-Data.Peers[peer.PublicKey].BytesIn) / (time.Since(Data.Peers[peer.PublicKey].LastUpdate).Seconds())
-			newRateOut := float64(peer.BytesOut-Data.Peers[peer.PublicKey].BytesOut) / (time.Since(Data.Peers[peer.PublicKey].LastUpdate).Seconds())
+			newRateIn := float64(peer.BytesIn-Data.Peers[peer.PublicKey.String()].BytesIn) / (time.Since(Data.Peers[peer.PublicKey.String()].LastUpdate).Seconds())
+			newRateOut := float64(peer.BytesOut-Data.Peers[peer.PublicKey.String()].BytesOut) / (time.Since(Data.Peers[peer.PublicKey.String()].LastUpdate).Seconds())
 
 			// Update the peer statistics
-			peerUpdate[peer.PublicKey] = Peer{
+			peerUpdate[peer.PublicKey.String()] = Peer{
 				PublicKey:   peer.PublicKey,
-				IPv6:        Data.Peers[peer.PublicKey].IPv6, // save the same IP
+				IPv6:        Data.Peers[peer.PublicKey.String()].IPv6, // save the same IP
 				LastUpdate:  time.Now(),
 				Last:        peer.Last,
 				SwitchLabel: peer.SwitchLabel,
