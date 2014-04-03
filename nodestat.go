@@ -21,12 +21,12 @@ import (
 // Peer data.
 type Peer struct {
 	PublicKey   *key.Public
-	State       admin.PeerState
+	State       string
 	IsIncoming  bool
-	BytesIn     int64
-	BytesOut    int64
+	BytesIn     int
+	BytesOut    int
 	Last        time.Time
-	SwitchLabel admin.Path
+	SwitchLabel *admin.Path
 
 	IPv6       net.IP
 	RateIn     float64
@@ -42,7 +42,7 @@ var Data struct {
 
 	// Data on this specific node.
 	Node struct {
-		Memory int64
+		Memory int
 		Angel  struct {
 			Uptime        Duration
 			PercentCPU    float64
@@ -59,8 +59,8 @@ var Data struct {
 		RateOut float64
 
 		// The difference of all bytes received and sent
-		BytesIn  int64
-		BytesOut int64
+		BytesIn  int
+		BytesOut int
 
 		angelPID []byte
 		corePID  []byte

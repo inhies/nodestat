@@ -18,7 +18,7 @@ func peerStatLoop() {
 		}
 
 		Data.Node.RateIn, Data.Node.RateOut = 0, 0
-		Data.Node.BytesIn, Data.Node.BytesOut = int64(0), int64(0)
+		Data.Node.BytesIn, Data.Node.BytesOut = 0, 0
 		peerUpdate := make(map[string]Peer)
 		// loop through the results and update peer statistics while checking
 		// for any peers that are no longer there.
@@ -39,12 +39,15 @@ func peerStatLoop() {
 			newRateIn := float64(peer.BytesIn-Data.Peers[peer.PublicKey.String()].BytesIn) / (time.Since(Data.Peers[peer.PublicKey.String()].LastUpdate).Seconds())
 			newRateOut := float64(peer.BytesOut-Data.Peers[peer.PublicKey.String()].BytesOut) / (time.Since(Data.Peers[peer.PublicKey.String()].LastUpdate).Seconds())
 
+			// Convert the last packet received timestamp to a time.Time
+			last := time.Unix(0, peer.Last*1000000)
+
 			// Update the peer statistics
 			peerUpdate[peer.PublicKey.String()] = Peer{
 				PublicKey:   peer.PublicKey,
 				IPv6:        Data.Peers[peer.PublicKey.String()].IPv6, // save the same IP
 				LastUpdate:  time.Now(),
-				Last:        peer.Last,
+				Last:        last,
 				SwitchLabel: peer.SwitchLabel,
 				IsIncoming:  peer.IsIncoming,
 				State:       peer.State,
